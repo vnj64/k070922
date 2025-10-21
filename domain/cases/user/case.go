@@ -1,4 +1,4 @@
-package cases
+package user
 
 import (
 	"github.com/google/uuid"

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: template_prj
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    networks:
+      - k070922_network
+
+networks:
+  k070922_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

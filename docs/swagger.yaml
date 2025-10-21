@@ -1,0 +1,146 @@
+definitions:
+  project_domain_props.LoginUserReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  project_domain_props.LoginUserResp:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  project_pkg_errs.Code:
+    enum:
+    - 500
+    - 400
+    - 401
+    - 403
+    - 404
+    - 422
+    - 429
+    - 201
+    type: integer
+    x-enum-comments:
+      BadRequest: Некорректный запрос
+      Created: Успешно создано
+      Forbidden: Запрещено
+      InternalServerError: Внутренняя ошибка сервера
+      NotFound: Не найдено
+      TooManyRequests: Слишком много запросов
+      Unauthorized: Неавторизованный доступ
+      UnprocessableEntity: Невозможность обработать запрос (например, валидация)
+    x-enum-varnames:
+    - InternalServerError
+    - BadRequest
+    - Unauthorized
+    - Forbidden
+    - NotFound
+    - UnprocessableEntity
+    - TooManyRequests
+    - Created
+  project_pkg_errs.Error:
+    properties:
+      code:
+        $ref: '#/definitions/project_pkg_errs.Code'
+      details:
+        type: string
+      message:
+        type: string
+    type: object
+  project_shared_dto.CreateUserDto:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      second_name:
+        type: string
+    type: object
+  project_shared_dto.CreateUserResponseDto:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      second_name:
+        type: string
+      uuid:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API в рамках курса РПМ
+  title: Golang Project Template
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Хэндлер для авторизации пользователя
+      parameters:
+      - description: Данные для авторизации пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/project_domain_props.LoginUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/project_domain_props.LoginUserResp'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/project_pkg_errs.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/project_pkg_errs.Error'
+      summary: Хэндлер для авторизации пользователя
+      tags:
+      - User
+  /api/v1/user:
+    post:
+      consumes:
+      - application/json
+      description: Создание пользователя
+      parameters:
+      - description: Данные для создания пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/project_shared_dto.CreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/project_shared_dto.CreateUserResponseDto'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/project_pkg_errs.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/project_pkg_errs.Error'
+      summary: Создание пользователя
+      tags:
+      - User
+securityDefinitions:
+  BearerAuth:
+    description: Type “Bearer {token}”
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

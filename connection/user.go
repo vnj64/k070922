@@ -1,7 +1,9 @@
 package connection
 
 import (
+	"errors"
 	"gorm.io/gorm"
+	"log"
 	"project/domain/models"
 )
 
@@ -31,8 +33,13 @@ func (r *userRepo) Delete(uuid string) error {
 
 func (r *userRepo) GetByEmail(email string) (*models.User, error) {
 	var user models.User
+	log.Println("get by email start the work")
 	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
 		return nil, err
 	}
+	log.Println("get by email finished the work")
 	return &user, nil
 }

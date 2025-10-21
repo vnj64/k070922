@@ -56,15 +56,16 @@ func GenerateAuthToken(userUUID string, role permissions.Role, cfg infra.Config)
 }
 
 // GenerateRefreshToken генерирует refresh_token для пользователя.
-func GenerateRefreshToken(userUUID uuid.UUID, cfg infra.Config) (*models.RefreshToken, error) {
+func GenerateRefreshToken(userUUID string, cfg infra.Config) (*models.RefreshToken, error) {
 	expHour, err := strconv.Atoi(cfg.JwtRefreshExpireHours())
 	if err != nil {
 		return nil, errs.ErrBadRequest
 	}
 	expirationTime := time.Now().Add(time.Duration(expHour) * time.Hour)
+	usrUUID := uuid.MustParse(userUUID)
 	refreshToken := &models.RefreshToken{
 		Token:     uuid.New().String(),
-		UserUUID:  userUUID,
+		UserUUID:  usrUUID,
 		ExpiresAt: expirationTime,
 	}
 	return refreshToken, nil

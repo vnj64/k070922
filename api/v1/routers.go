@@ -7,11 +7,14 @@ import (
 
 type Handlers struct {
 	UserHandler *UserHandler
+	AuthHandler *AuthHandler
 }
 
 func SetupRoutes(app *fiber.App, h *Handlers) {
 	api := app.Group("/api/v1")
 
-	docs := api.Group("/docs")
+	docs := app.Group("/docs")
 	docs.Get("/swagger/*", swagger.HandlerDefault)
+
+	RegisterAuthRoutes(api.Group("/auth"), h.AuthHandler)
 }

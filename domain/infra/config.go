@@ -9,4 +9,12 @@ type Config interface {
 	JwtPublicPemPath() string
 	FullHttpHost() string
 	HttpPort() string
+	DbHost() string
+	DbPort() string
+	DbUser() string
+	DbPassword() string
+	DbName() string
+	DbSslMode() string
+	AdminLogin() string
+	AdminPassword() string
 }

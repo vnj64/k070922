@@ -1,6 +1,11 @@
 package core
 
-import "project/domain"
+import (
+	"project/connection"
+	"project/domain"
+	"project/domain/infra"
+	"project/infra/config"
+)
 
 type Ctx struct {
 	infra domain.Infra
@@ -8,6 +13,11 @@ type Ctx struct {
 }
 
 type infr struct {
+	cfg infra.Config
+}
+
+func (s *infr) Config() infra.Config {
+	return s.cfg
 }
 
 func (c *Ctx) Infra() domain.Infra {
@@ -19,9 +29,23 @@ func (c *Ctx) Connection() domain.Connection {
 }
 
 func (c *Ctx) Make() domain.Context {
-	return &Ctx{}
+	return &Ctx{
+		infra: c.infra,
+		con:   c.con,
+	}
 }
 
 func InitCtx() *Ctx {
-	return &Ctx{}
+	cfg := config.Make()
+	db, err := connection.Make(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	return &Ctx{
+		infra: &infr{
+			cfg: cfg,
+		},
+		con: db,
+	}
 }

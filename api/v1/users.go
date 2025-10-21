@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"project/domain/cases"
+	"project/domain/cases/user"
 	props2 "project/domain/props"
 	"project/pkg/errs"
 	"project/pkg/middleware"
@@ -10,11 +10,11 @@ import (
 )
 
 type UserHandler struct {
-	useCase cases.UserUseCase
+	useCase user.UserUseCase
 	mwr     *middleware.Middleware
 }
 
-func NewUserHandler(useCase cases.UserUseCase, mwr *middleware.Middleware) *UserHandler {
+func NewUserHandler(useCase user.UserUseCase, mwr *middleware.Middleware) *UserHandler {
 	return &UserHandler{
 		useCase: useCase,
 		mwr:     mwr,
